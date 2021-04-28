@@ -42,17 +42,17 @@ def fft_blur_detect(image, title="", size=60, thresh=1, filter_type="s", vis=Fal
         ax[0].set_title("Original")
         ax[0].set_xticks([])
         ax[0].set_yticks([])
-        # display the magnitude image
+        # display the FFT magnitude spectrum
         ax[1].imshow(mag, cmap="gray")
         ax[1].set_title("Magnitude Spectrum")
         ax[1].set_xticks([])
         ax[1].set_yticks([])
-        # display the magnitude image
+        # display the reconstructed image
         ax[2].imshow(np.abs(recon), cmap="gray")
         ax[2].set_title("After filtering, Mean = " + str(np.around(mean, 4)))
         ax[2].set_xticks([])
         ax[2].set_yticks([])
-        # show our plots
+        # save figure to filtered folder as jpg file
         plt.savefig('filtered/f' + filter_type + "_" + title, bbox_inches='tight')
 
     # effect of size
@@ -61,16 +61,18 @@ def fft_blur_detect(image, title="", size=60, thresh=1, filter_type="s", vis=Fal
 
         # display the original input image
         (fig, ax) = plt.subplots(1, 2, figsize=(10, 4))
-        # display the magnitude image
+        # display the filtered FFT magnitude spectrum
         ax[0].imshow(mag, cmap="gray")
         ax[0].set_title("Magnitude Spectrum")
         ax[0].set_xticks([])
         ax[0].set_yticks([])
-        # display the magnitude image
+        # display the reconstructed image
         ax[1].imshow(np.abs(recon), cmap="gray")
         ax[1].set_title("After filtering")
         ax[1].set_xticks([])
         ax[1].set_yticks([])
+
+        # label and save image as jpg file to size folder
         plt.title("Circle radius = " + str(size) + " pixels, Mean = " + str(np.around(mean, 4)))
         plt.savefig('size/' + filter_type + "_" + title[:-4] + str(size) + ".jpg", bbox_inches='tight')
 

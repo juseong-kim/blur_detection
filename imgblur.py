@@ -38,32 +38,31 @@ text = text.format(mean)
 cv2.putText(image, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
 print("[INFO] {}".format(text))
 
-# save output
+# save output as jpg file to output folder
 filename = 'output/o' + args["filter"] + "_" + str(np.around(mean, 4)) + "_" + args["image"][7:]
 cv2.imwrite(filename, image)
 
-# check to see if are going to test our FFT blurriness detector using
-# various sizes of a Gaussian kernel
+# test blur detection for varying degrees of Gaussian blur
 if args["test"] > 0:
     # loop over various blur radii
     for radius in range(1, 16, 2):
         # clone the original grayscale image
         image = orig.copy()
-        # check to see if the kernel radius is greater than zero
+        # if the kernel radius is greater than zero
         if radius > 0:
-            # blur the input image by the supplied radius using a
-            # Gaussian kernel
+            # blur the input image with Gaussian kernel of specified radius
             image = cv2.GaussianBlur(image, (radius, radius), 0)
-            # apply our blur detector using the FFT
+            # apply blur detection algorithm
             (mean, blurry) = fft_blur_detect(image, title=args["image"][7:], size=args["size"],
                                              thresh=args["thresh"], filter_type=args["filter"], vis=args["vis"] > 0)
-            # draw on the image, indicating whether or not it is blurry
+            # annotate result of algorithm on image
             image = np.dstack([image] * 3)
             color = (40, 43, 248) if blurry else (25, 194, 45)
             text = "Blur detected ({:.4f})" if blurry else "No blur detected ({:.4f})"
             text = text.format(mean)
             cv2.putText(image, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
             print("[INFO] Kernel: {}, Result: {}".format(radius, text))
-        # save the image
+
+        # save the image as jpg file to gaussian folder
         filepath = "gaussian/" + args["image"][7:-4] + str(radius) + ".jpg"
         cv2.imwrite(filepath, image)
